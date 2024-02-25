@@ -16,8 +16,9 @@ const register = async(req, res)=>{
             return res.status(400).json({msg: "User Already Exist"})
         }
         else{
-            await User.create({username, email, phone, password})
-            res.status(200).json({msg : "User registered successfully", data: req.body})
+            const userCreated = await User.create({username, email, phone, password})
+            // generateToken method is defined in user-model.js and can be accessed here directly.
+            res.status(201).json({msg : 'Registration Successful', token: await userCreated.generateToken(), userId: userCreated._id.toString(),})
         }
     }
     catch(error){
